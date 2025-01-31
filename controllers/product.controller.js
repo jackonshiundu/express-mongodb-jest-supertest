@@ -1,5 +1,14 @@
 const Product = require("../models/product.model");
+/*
+ * Utility function for handling error responses
+ * @param res - The response object.THis is the objects the we will define the details to be send back to the user.
+ * @param error - This is the error OBject that will be passes from the parameters in the CAtch Block
 
+*/
+const handleErrorResponse = (res, error, message = "An error occurred") => {
+  console.error(error); // Log the error for debugging
+  res.status(500).json({ error: message, details: error.message });
+};
 /**
  * It's an asynchronous function that uses the await keyword to wait for the result of the find()
  * method on the Product model.
@@ -12,9 +21,12 @@ const Product = require("../models/product.model");
 const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
+    if (!products || products.length === 0) {
+      return res.status(404).json({ message: "No products found." });
+    }
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json(error);
+    handleErrorResponse(res, error, "Failed to fetch products");
   }
 };
 
@@ -25,11 +37,15 @@ const getProducts = async (req, res) => {
  * @param res - The response object.
  */
 const getProduct = async (req, res) => {
+  const { id } = req.params;
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json(error);
+    handleErrorResponse(res, error, "Failed to fetch product");
   }
 };
 
@@ -41,12 +57,26 @@ const getProduct = async (req, res) => {
  * @param res - The response object.
  */
 const createProduct = async (req, res) => {
+  const { name, price, description } = req.body;
+
+  // Validate required fields
+  if (!name || !price || !description) {
+    return res
+      .status(400)
+      .json({ message: "Name, price, and description are required." });
+  }
+
   try {
-    const product = await Product.create(req.body);
+    const newProduct = new Product({
+      name,
+      price,
+      description,
+    });
+
+    const product = await newProduct.save();
     res.status(201).json(product);
   } catch (error) {
-    res.status(500).json(error);
-    console.log(error);
+    handleErrorResponse(res, error, "Failed to create product");
   }
 };
 
@@ -58,16 +88,23 @@ const createProduct = async (req, res) => {
  * @param res - The response object.
  */
 const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+    const product = await Product.findByIdAndUpdate(id, updateData, {
+      new: true, // Return the updated product
     });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json(error);
+    handleErrorResponse(res, error, "Failed to update product");
   }
 };
-
 /**
  * It finds a product by its id and deletes it.
  * @param req - The request object. This object represents the HTTP request and has properties for the
@@ -75,14 +112,20 @@ const updateProduct = async (req, res) => {
  * @param res - The response object.
  */
 const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    res.status(200).json(product);
+    const product = await Product.findByIdAndDelete(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    res.status(200).json({ message: "Product successfully deleted", product });
   } catch (error) {
-    res.status(500).json(error);
+    handleErrorResponse(res, error, "Failed to delete product");
   }
 };
-
 module.exports = {
   getProducts,
   getProduct,

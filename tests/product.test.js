@@ -25,7 +25,7 @@ describe("GET /api/products", () => {
 describe("GET /api/products/:id", () => {
   it("should return a product", async () => {
     const res = await request(app).get(
-      "/api/products/6331abc9e9ececcc2d449e44"
+      "/api/products/679cae3ed763a41abfda7384"
     );
     expect(res.statusCode).toBe(200);
     expect(res.body.name).toBe("Product 1");
@@ -47,7 +47,7 @@ describe("POST /api/products", () => {
 describe("PUT /api/products/:id", () => {
   it("should update a product", async () => {
     const res = await request(app)
-      .patch("/api/products/6331abc9e9ececcc2d449e44")
+      .patch("/api/products/679cae3ed763a41abfda7384")
       .send({
         name: "Product 4",
         price: 104,
@@ -61,7 +61,7 @@ describe("PUT /api/products/:id", () => {
 describe("DELETE /api/products/:id", () => {
   it("should delete a product", async () => {
     const res = await request(app).delete(
-      "/api/products/6331abc9e9ececcc2d449e44"
+      "/api/products/679cae3ed763a41abfda7384"
     );
     expect(res.statusCode).toBe(200);
   });
