@@ -79,20 +79,31 @@ Test Breakdown
 beforeEach and afterEach
 beforeEach: Establishes a connection to the database before each test using the MongoDB URI from the environment variables.
 afterEach: Closes the database connection after each test to ensure a clean slate for the next test.
+
 CRUD Test Details
+
 GET /api/products: Verifies that the API correctly returns all products when there are products in the database.
+
 GET /api/products/:id: Verifies that the API correctly returns the details of a specific product using its ID.
+
 POST /api/products: Tests the creation of a new product by sending data in the request body and verifying that the API returns the newly created product with the correct status code.
+
 PUT /api/products/:id: Verifies that the API can update an existing product’s details by sending a PATCH request with updated information.
+
 DELETE /api/products/:id: Tests that a product can be successfully deleted by its ID and that the API responds with a status indicating success.
+
 Error Handling
+
 If there is an error during the database connection or any of the API operations, the tests will fail, and you'll see an error message detailing the issue.
 Common errors might include:
 404: If a product is not found by ID.
 400: If required fields are missing when creating or updating a product.
 500: If there's a server error during any of the API operations.
+
 Additional Information
+
 This test suite assumes that the MongoDB database is correctly set up and accessible.
 The tests use the Supertest library to make HTTP requests to the API and Jest to manage the test lifecycle and assertions.
+
 Conclusion
 This test suite ensures that your product API is working correctly by testing each route (GET, POST, PUT, DELETE) with different scenarios. It provides valuable feedback during development to ensure that your API endpoints are functioning as expected.
