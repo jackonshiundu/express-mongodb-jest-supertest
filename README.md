@@ -10,12 +10,13 @@ This will install all required packages, including Jest, Supertest, and mongoose
 
 2. Set up Environment Variables
    Make sure you have a .env file in the root of your project with the following variable set:
-
+```
 MONGODB_URI=your_mongodb_connection_string
 This MONGODB_URI is required to connect to your database, and it will be used in the tests to run against your MongoDB instance.
-
+```
 3. Database Connection
    The tests will automatically connect to your MongoDB database before each test (beforeEach) and close the connection after each test (afterEach) to keep the tests isolated and clean.
+```
    beforeEach(async () => {
    await mongoose.connect(process.env.MONGODB_URI);
    });
@@ -24,7 +25,7 @@ This MONGODB_URI is required to connect to your database, and it will be used in
 afterEach(async () => {
 await mongoose.connection.close();
 });
-
+```
 # Controllers
 
 in the controller folder we have all the logic that would be use to add, update,fetch and delete data to the database
@@ -45,7 +46,7 @@ This file contains automated tests for the Product API using Jest and Supertest.
 
 Testing Routes
 This file tests the following Product API endpoints:
-
+```
 GET /api/products - Fetches all products
 
 Test: Verifies that the API returns a status code of 200 and that there are products in the response.
@@ -59,23 +60,26 @@ PUT /api/products/:id - Updates an existing product by its id
 
 Test: Verifies that the product is updated correctly, and that the response contains the updated information, returning a 200 status.
 DELETE /api/products/:id - Deletes a product by its id
-
+```
 Test: Verifies that the product is deleted successfully, and that the response returns a 200 status.
 Running the Tests
 
 1. Run Tests Using Jest
    Once you have your environment set up and the dependencies installed, you can run the tests using Jest with the following command:
-
+``
 npm test
+```
 This will automatically run all the test cases in the file, and you'll see the results in the terminal.
 
-2. Running a Specific Test
+3. Running a Specific Test
    If you want to run a specific test (for example, just the POST /api/products test), you can use the -t flag with a part of the test name:
-
+```
 npm test -t "should create a product"
+```
 This will run only the test that matches the given string.
 
 Test Breakdown
+```
 beforeEach and afterEach
 beforeEach: Establishes a connection to the database before each test using the MongoDB URI from the environment variables.
 afterEach: Closes the database connection after each test to ensure a clean slate for the next test.
@@ -91,8 +95,8 @@ POST /api/products: Tests the creation of a new product by sending data in the r
 PUT /api/products/:id: Verifies that the API can update an existing product’s details by sending a PATCH request with updated information.
 
 DELETE /api/products/:id: Tests that a product can be successfully deleted by its ID and that the API responds with a status indicating success.
-
-Error Handling
+```
+# Error Handling
 
 If there is an error during the database connection or any of the API operations, the tests will fail, and you'll see an error message detailing the issue.
 Common errors might include:
@@ -100,10 +104,10 @@ Common errors might include:
 400: If required fields are missing when creating or updating a product.
 500: If there's a server error during any of the API operations.
 
-Additional Information
+# Additional Information
 
 This test suite assumes that the MongoDB database is correctly set up and accessible.
 The tests use the Supertest library to make HTTP requests to the API and Jest to manage the test lifecycle and assertions.
 
-Conclusion
+# Conclusion
 This test suite ensures that your product API is working correctly by testing each route (GET, POST, PUT, DELETE) with different scenarios. It provides valuable feedback during development to ensure that your API endpoints are functioning as expected.
